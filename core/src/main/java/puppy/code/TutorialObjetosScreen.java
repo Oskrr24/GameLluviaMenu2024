@@ -16,6 +16,7 @@ public class TutorialObjetosScreen implements PantallaJuego {
     private Texture gotaMalaTexture;
     private Texture tarroTexture;
     private Texture gotaEspecial;
+    private Texture gotaVidaExtra;
 
     public TutorialObjetosScreen(final GameLluviaMenu game) {
         this.game = game;
@@ -31,31 +32,51 @@ public class TutorialObjetosScreen implements PantallaJuego {
         gotaMalaTexture = new Texture(Gdx.files.internal("dropBad.png"));
         tarroTexture = new Texture(Gdx.files.internal("bucket.png"));
         gotaEspecial = new Texture(Gdx.files.internal("estrella.png"));
+        gotaVidaExtra = new Texture(Gdx.files.internal("vidaExtra.png"));
+        
     }
 
     @Override
-    public void dibujar() {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
-        game.getBatch().setProjectionMatrix(camera.combined);
+  public void dibujar() {
+    ScreenUtils.clear(0, 0, 0.2f, 1);
+    game.getBatch().setProjectionMatrix(camera.combined);
 
-        game.getBatch().begin();
-        game.getBatch().draw(fondo, 0, 0, camera.viewportWidth, camera.viewportHeight);
+    game.getBatch().begin();
+    game.getBatch().draw(fondo, 0, 0, camera.viewportWidth, camera.viewportHeight);
 
-        // Mostrar texturas y descripciones de los objetos
-        game.getBatch().draw(gotaBuenaTexture, 100, 400, 64, 64);
-        font.draw(game.getBatch(), "Nebulosa: +10 puntos", 180, 430);
+    // Variables de posición inicial y espaciado para los iconos y texto descriptivo
+    float xIcon = 100;           // Posición X de los iconos
+    float yStart = 400;          // Posición Y inicial de los iconos
+    float iconSize = 64;         // Tamaño de los iconos
+    float textOffsetX = 80;      // Desplazamiento en X del texto respecto al icono
+    float textOffsetY = 30;      // Ajuste de posición en Y del texto respecto al icono
+    float spacing = 90;          // Espacio entre cada elemento
 
-        game.getBatch().draw(gotaMalaTexture, 100, 300, 64, 64);
-        font.draw(game.getBatch(), "Meteorito: -1 vida", 180, 330);
+    // Dibuja cada elemento en la posición ajustada
+    game.getBatch().draw(gotaBuenaTexture, xIcon, yStart, iconSize, iconSize);
+    font.draw(game.getBatch(), "Nebulosa: +10 puntos", xIcon + textOffsetX, yStart + textOffsetY);
 
-        game.getBatch().draw(gotaEspecial, 100, 200, 64, 64);
-        font.draw(game.getBatch(), "Estrella: Puntos dobles!", 180, 230);
-        
-        game.getBatch().draw(tarroTexture, 100, 100, 64, 64);
-        font.draw(game.getBatch(), "Nave: Recoge las estrellas", 180, 130);
+    game.getBatch().draw(gotaMalaTexture, xIcon, yStart - spacing, iconSize, iconSize);
+    font.draw(game.getBatch(), "Meteorito: -1 vida", xIcon + textOffsetX, yStart - spacing + textOffsetY);
 
-        game.getBatch().end();
-    }
+    game.getBatch().draw(gotaEspecial, xIcon, yStart - 2 * spacing, iconSize, iconSize);
+    font.draw(game.getBatch(), "Estrella: Puntos dobles!", xIcon + textOffsetX, yStart - 2 * spacing + textOffsetY);
+
+    game.getBatch().draw(gotaVidaExtra, xIcon, yStart - 3 * spacing, iconSize, iconSize);
+    font.draw(game.getBatch(), "Satélite: Vida Extra!", xIcon + textOffsetX, yStart - 3 * spacing + textOffsetY);
+
+    game.getBatch().draw(tarroTexture, xIcon, yStart - 4 * spacing, iconSize, iconSize);
+    font.draw(game.getBatch(), "Nave: Recoge las estrellas", xIcon + textOffsetX, yStart - 4 * spacing + textOffsetY);
+
+    // Agregar el mensaje en el lado derecho de la pantalla
+    String mensaje = "Click para ir atrás";
+    float mensajeX = camera.viewportWidth - 10 - font.getRegion().getRegionWidth(); // 10 px de margen
+    float mensajeY = camera.viewportHeight / 2; // Centrado verticalmente
+
+    font.draw(game.getBatch(), mensaje, mensajeX, mensajeY);
+
+    game.getBatch().end();
+}
 
     @Override
     public void manejarEntradas() {

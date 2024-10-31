@@ -52,7 +52,8 @@ public class Tarro {
         vidas--;
         herido = true;
         tiempoHerido = tiempoHeridoMax; // Reiniciar tiempo herido
-        sonidoHerido.play(); // Reproducir sonido de daño
+        sonidoHerido.play(0.05f); // Reproducir sonido de daño
+     
     }
 
     public void dibujar(SpriteBatch batch) {

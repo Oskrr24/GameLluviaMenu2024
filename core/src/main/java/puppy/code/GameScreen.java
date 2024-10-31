@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+
 
 public class GameScreen implements Screen {
     final GameLluviaMenu game;
@@ -20,8 +20,8 @@ public class GameScreen implements Screen {
     private Sound hurtSound; // Mantener referencias para liberarlas en dispose
     private Sound dropSound;
     private Music rainMusic;
-    private Texture fondo;
-
+    private Texture fondo;   
+    
     public GameScreen(final GameLluviaMenu game) {
         this.game = game;
         this.batch = game.getBatch(); // Usar el batch proporcionado por game
@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
         // Cargar texturas y sonidos
         hurtSound = Gdx.audio.newSound(Gdx.files.internal("hurt.wav"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("musicaFondo.mp3"));
 
         Texture gota = new Texture(Gdx.files.internal("drop.png"));
         Texture gotaMala = new Texture(Gdx.files.internal("dropBad.png"));
@@ -64,7 +64,6 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-
         // Dibuja la imagen de fondo
         batch.draw(fondo, 0, 0, camera.viewportWidth, camera.viewportHeight);
 
@@ -111,10 +110,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        // Pausar la música y cambiar a pantalla de pausa
+
         lluvia.pausar();
-        // Cambiar a la pantalla de pausa
-        game.setScreen(new PausaScreen(game, this)); // 'this' ahora es válido
+        game.setScreen(new PausaScreen(game, this));
     }
 
     @Override
@@ -132,4 +130,5 @@ public class GameScreen implements Screen {
         rainMusic.dispose(); // Liberar la música de lluvia
         fondo.dispose();
     }
+    
 }

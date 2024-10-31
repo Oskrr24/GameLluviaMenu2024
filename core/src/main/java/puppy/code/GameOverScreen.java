@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameOverScreen implements PantallaJuego {
@@ -24,8 +23,7 @@ public class GameOverScreen implements PantallaJuego {
         // Inicializa botones con texto y color
         botonReiniciar = new BotonMenuSimple(400, 240, 200, 50, "Reiniciar", colorReiniciar, () -> game.setScreen(new GameScreen(game)));
         botonSalir = new BotonMenuSimple(400, 180, 200, 50, "Salir", colorSalir, () -> Gdx.app.exit());
-        
-        // Cargar la textura de fondo
+         // Cargar la textura de fondo
         fondo = new Texture(Gdx.files.internal("fondo-juego-2.png"));
     }
 
