@@ -4,42 +4,57 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-	public class GameLluviaMenu extends Game {
+public class GameLluviaMenu extends Game {
 
-		private SpriteBatch batch;
-		private BitmapFont font;
-		private int higherScore;
+    // Instancia única de la clase (Singleton)
+    private static GameLluviaMenu instance;
 
-		public void create() {
-			batch = new SpriteBatch();
-			font = new BitmapFont(); // use libGDX's default Arial font
-			this.setScreen(new MainMenuScreen(this));
-		}
+    private SpriteBatch batch;
+    private BitmapFont font;
+    private int higherScore;
 
-		public void render() {
-			super.render(); // important!
-		}
+    // Constructor privado para evitar instanciación externa
+    private GameLluviaMenu() {}
 
-		public void dispose() {
-			batch.dispose();
-			font.dispose();
-		}
+    // Método estático para obtener la única instancia
+    public static GameLluviaMenu getInstance() {
+        if (instance == null) {
+            instance = new GameLluviaMenu();
+        }
+        return instance;
+    }
 
-		public SpriteBatch getBatch() {
-			return batch;
-		}
+    @Override
+    public void create() {
+        batch = new SpriteBatch();
+        font = new BitmapFont(); // usa la fuente Arial predeterminada de libGDX
+        this.setScreen(new MainMenuScreen(this));
+    }
 
-		public BitmapFont getFont() {
-			return font;
-		}
+    @Override
+    public void render() {
+        super.render(); // importante!
+    }
 
-		public int getHigherScore() {
-			return higherScore;
-		}
+    @Override
+    public void dispose() {
+        batch.dispose();
+        font.dispose();
+    }
 
-		public void setHigherScore(int higherScore) {
-			this.higherScore = higherScore;
-		}
-		
+    public SpriteBatch getBatch() {
+        return batch;
+    }
 
-	}
+    public BitmapFont getFont() {
+        return font;
+    }
+
+    public int getHigherScore() {
+        return higherScore;
+    }
+
+    public void setHigherScore(int higherScore) {
+        this.higherScore = higherScore;
+    }
+}
