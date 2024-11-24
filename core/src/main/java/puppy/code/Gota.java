@@ -11,7 +11,7 @@ public abstract class Gota {
     protected Sound sonido;
     protected int tipo;
     protected float tamaño;
-    
+
     public Gota(Texture textura, Sound sonido, int tipo, float tamaño) {
         this.textura = textura;
         this.sonido = sonido;
@@ -21,13 +21,24 @@ public abstract class Gota {
         this.area.setSize(tamaño);
     }
 
-    public abstract void caer(float deltaTime);
-    
-    public abstract void dibujar(SpriteBatch batch);
-    
-    // Método abstracto para manejar la colisión con el tarro
-    public abstract void manejarColision(Tarro tarro, boolean puntosDobles);
-    
+    public final void actualizar(SpriteBatch batch, float deltaTime, Tarro tarro, boolean puntosDobles) {
+        caer(deltaTime);                // Actualiza la posición de la gota
+        if (verificarColision(tarro)) { // Verifica si hay colisión con el tarro
+            manejarColision(tarro, puntosDobles);
+        }
+        dibujar(batch);                 // Dibuja la gota en pantalla
+    }
+
+    protected abstract void caer(float deltaTime);
+
+    protected abstract void manejarColision(Tarro tarro, boolean puntosDobles);
+
+    protected abstract void dibujar(SpriteBatch batch);
+
+    protected boolean verificarColision(Tarro tarro) {
+        return tarro.getArea().overlaps(this.area);
+    }
+
     public Rectangle getArea() {
         return area;
     }
