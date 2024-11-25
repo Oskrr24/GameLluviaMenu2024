@@ -1,16 +1,17 @@
-package puppy.code;
+package puppy.code.Gota;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import puppy.code.Tarro;
 
-public class GotaEspecial extends Gota {
+public class GotaVidaExtra extends Gota {
     private static final float TAMANO_GOTA = 50f;
 
-    public GotaEspecial(Texture textura, Sound sonido, float tamaño) {
-        super(textura, sonido, 3, tamaño);
+    public GotaVidaExtra(Texture textura, Sound sonido, float tamaño) {
+        super(textura, sonido, 4, tamaño);
     }
 
     @Override
@@ -26,20 +27,21 @@ public class GotaEspecial extends Gota {
     @Override
     public void manejarColision(Tarro tarro, boolean puntosDobles) {
         jugarSonido();
+        tarro.aumentarVida();
     }
 
-    public static GotaEspecial generarGotaEspecial(Texture textura, Sound sonido, Array<Gota> gotasExistentes) {
-        GotaEspecial nuevaGotaEspecial = new GotaEspecial(textura, sonido, TAMANO_GOTA);
+    public static GotaVidaExtra generarGotaVidaExtra(Texture textura, Sound sonido, Array<Gota> gotasExistentes) {
+        GotaVidaExtra nuevaGotaVidaExtra = new GotaVidaExtra(textura, sonido, TAMANO_GOTA);
         float xPos;
         float yPos = 480;
 
         do {
             xPos = MathUtils.random(0, 800 - TAMANO_GOTA);
-            nuevaGotaEspecial.getArea().x = xPos;
-            nuevaGotaEspecial.getArea().y = yPos;
-        } while (hayColisionConGotas(nuevaGotaEspecial, gotasExistentes));
+            nuevaGotaVidaExtra.getArea().x = xPos;
+            nuevaGotaVidaExtra.getArea().y = yPos;
+        } while (hayColisionConGotas(nuevaGotaVidaExtra, gotasExistentes));
 
-        return nuevaGotaEspecial;
+        return nuevaGotaVidaExtra;
     }
 
     private static boolean hayColisionConGotas(Gota nuevaGota, Array<Gota> gotasExistentes) {

@@ -1,8 +1,9 @@
-package puppy.code;
+package puppy.code.Gota;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import puppy.code.Tarro;
 
 public class GotaBuena extends Gota {
     public GotaBuena(Texture textura, Sound sonido, float tamaño) {

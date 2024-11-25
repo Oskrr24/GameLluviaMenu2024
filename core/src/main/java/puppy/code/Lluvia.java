@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import puppy.code.Gota.*;
+import puppy.code.GotaFactory.*;
 
 public class Lluvia {
     private Array<Gota> gotas;
@@ -35,7 +37,7 @@ public class Lluvia {
         this.gotaVidaExtra = gotaVidaExtra;
         puntosDobles = false;
         lastVidaExtraDropTime = 0;
-        gotas = new Array<>(); 
+        gotas = new Array<>();
         vidaExtraGenerada = false;
     }
 
@@ -49,26 +51,34 @@ public class Lluvia {
     private void crearGotaDeLluvia() {
         Gota nuevaGota;
         float xPos = MathUtils.random(0, 800 - TAMANO_GOTA);
-        float yPos = 480; 
+        float yPos = 480;
 
+        // Usar el factory para crear la gota
+        GotaFactory factory;
         if (MathUtils.random(1, 10) < 5) {
-            nuevaGota = new GotaMala(gotaMala, dropSound, TAMANO_GOTA);
+            factory = GotaFactoryProvider.getFactory(TipoGota.MALA);
+            nuevaGota = factory.crearGota(gotaMala, dropSound, TAMANO_GOTA);
         } else {
-            nuevaGota = new GotaBuena(gotaBuena, dropSound, TAMANO_GOTA);
+            factory = GotaFactoryProvider.getFactory(TipoGota.BUENA);
+            nuevaGota = factory.crearGota(gotaBuena, dropSound, TAMANO_GOTA);
         }
 
         nuevaGota.getArea().x = xPos;
         nuevaGota.getArea().y = yPos;
-        gotas.add(nuevaGota); 
+        gotas.add(nuevaGota);
 
         lastDropTime = TimeUtils.nanoTime();
     }
 
-    public boolean actualizarMovimiento(Tarro tarro) {
+    public boolean actualizarMovimiento(SpriteBatch batch,Tarro tarro) {
         if (TimeUtils.nanoTime() - lastDropTime > 100000000) crearGotaDeLluvia();
 
         if (tarro.getVidas() == 1 && !vidaExtraGenerada) {
-            Gota nuevaGotaVidaExtra = GotaVidaExtra.generarGotaVidaExtra(gotaVidaExtra, dropSound, gotas);
+            GotaFactory vidaExtraFactory = GotaFactoryProvider.getFactory(TipoGota.VIDA_EXTRA);
+            Gota nuevaGotaVidaExtra = vidaExtraFactory.crearGota(gotaVidaExtra, dropSound, TAMANO_GOTA);
+            // Establecer posición aleatoria para la gota de vida extra
+            nuevaGotaVidaExtra.getArea().x = MathUtils.random(0, 800 - TAMANO_GOTA);
+            nuevaGotaVidaExtra.getArea().y = 480;
             gotas.add(nuevaGotaVidaExtra);
             vidaExtraGenerada = true;
             lastVidaExtraDropTime = TimeUtils.nanoTime();
@@ -78,7 +88,7 @@ public class Lluvia {
 
         for (int i = 0; i < gotas.size; i++) {
             Gota gota = gotas.get(i);
-            gota.caer(Gdx.graphics.getDeltaTime());
+            gota.actualizar(batch, Gdx.graphics.getDeltaTime(), tarro, puntosDobles);
 
             if (gota.getArea().y + TAMANO_GOTA < 0) {
                 gotas.removeIndex(i);
@@ -87,14 +97,14 @@ public class Lluvia {
 
             if (gota.getArea().overlaps(tarro.getArea())) {
                 gota.manejarColision(tarro, puntosDobles);
-                
+
                 if (gota instanceof GotaBuena) {
                     puntosAlcanzados += 10;
                     verificarGeneracionGotaEspecial(tarro);
                 }
-                
+
                 if (tarro.getVidas() <= 0) return false;
-                
+
                 gotas.removeIndex(i);
             }
         }
@@ -107,13 +117,21 @@ public class Lluvia {
 
     private void verificarGeneracionGotaEspecial(Tarro tarro) {
         if (puntosAlcanzados >= 250 && puntosAlcanzados % 250 == 0) {
-            Gota nuevaGotaEspecial = GotaEspecial.generarGotaEspecial(gotaEspecial, dropSound, gotas);
+            GotaFactory especialFactory = GotaFactoryProvider.getFactory(TipoGota.ESPECIAL);
+            Gota nuevaGotaEspecial = especialFactory.crearGota(gotaEspecial, dropSound, TAMANO_GOTA);
+            // Establecer posición aleatoria para la gota especial
+            nuevaGotaEspecial.getArea().x = MathUtils.random(0, 800 - TAMANO_GOTA);
+            nuevaGotaEspecial.getArea().y = 480;
             gotas.add(nuevaGotaEspecial);
             activarPuntosDobles();
         }
-        
+
         if (puntosAlcanzados >= 300 && puntosAlcanzados % 300 == 0) {
-            Gota nuevaGotaVidaExtra = GotaVidaExtra.generarGotaVidaExtra(gotaVidaExtra, dropSound, gotas);
+            GotaFactory vidaExtraFactory = GotaFactoryProvider.getFactory(TipoGota.VIDA_EXTRA);
+            Gota nuevaGotaVidaExtra = vidaExtraFactory.crearGota(gotaVidaExtra, dropSound, TAMANO_GOTA);
+            // Establecer posición aleatoria para la gota de vida extra
+            nuevaGotaVidaExtra.getArea().x = MathUtils.random(0, 800 - TAMANO_GOTA);
+            nuevaGotaVidaExtra.getArea().y = 480;
             gotas.add(nuevaGotaVidaExtra);
         }
     }
@@ -122,7 +140,7 @@ public class Lluvia {
         puntosDobles = true;
         tiempoPuntosDobles = TimeUtils.nanoTime();
     }
-    
+
     public void actualizarDibujoLluvia(SpriteBatch batch) {
         for (Gota gota : gotas) {
             gota.dibujar(batch);
@@ -133,7 +151,7 @@ public class Lluvia {
         dropSound.dispose();
         rainMusic.dispose();
     }
-    
+
     public void pausar() {
         rainMusic.stop();
     }

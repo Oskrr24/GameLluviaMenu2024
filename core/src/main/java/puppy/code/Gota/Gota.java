@@ -1,9 +1,10 @@
-package puppy.code;
+package puppy.code.Gota;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import puppy.code.Tarro;
 
 public abstract class Gota {
     protected Rectangle area;
@@ -21,19 +22,17 @@ public abstract class Gota {
         this.area.setSize(tamaño);
     }
 
+
     public final void actualizar(SpriteBatch batch, float deltaTime, Tarro tarro, boolean puntosDobles) {
-        caer(deltaTime);                // Actualiza la posición de la gota
-        if (verificarColision(tarro)) { // Verifica si hay colisión con el tarro
-            manejarColision(tarro, puntosDobles);
-        }
-        dibujar(batch);                 // Dibuja la gota en pantalla
+        caer(deltaTime);
+        dibujar(batch);
     }
 
-    protected abstract void caer(float deltaTime);
+    public abstract void caer(float deltaTime);
 
-    protected abstract void manejarColision(Tarro tarro, boolean puntosDobles);
+    public abstract void dibujar(SpriteBatch batch);
 
-    protected abstract void dibujar(SpriteBatch batch);
+    public abstract void manejarColision(Tarro tarro, boolean puntosDobles);
 
     protected boolean verificarColision(Tarro tarro) {
         return tarro.getArea().overlaps(this.area);

@@ -13,20 +13,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameScreen implements Screen {
     final GameLluviaMenu game;
     private OrthographicCamera camera;
-    private SpriteBatch batch;       
+    private SpriteBatch batch;
     private BitmapFont font;
     private Tarro tarro;
     private Lluvia lluvia;
     private Sound hurtSound; // Mantener referencias para liberarlas en dispose
     private Sound dropSound;
     private Music rainMusic;
-    private Texture fondo;   
-    
+    private Texture fondo;
+
     public GameScreen(final GameLluviaMenu game) {
         this.game = game;
         this.batch = game.getBatch(); // Usar el batch proporcionado por game
         this.font = game.getFont();
-        
+
         fondo = new Texture(Gdx.files.internal("fondo-juego-2.png")); // Reemplaza "background.png" con el nombre de tu imagen de fondo
 
         // Cargar texturas y sonidos
@@ -38,10 +38,10 @@ public class GameScreen implements Screen {
         Texture gotaMala = new Texture(Gdx.files.internal("dropBad.png"));
         Texture gotaEspecial = new Texture(Gdx.files.internal("estrella.png")); // Textura para la gota especial
         Texture gotaVidaExtra = new Texture(Gdx.files.internal("vidaExtra.png")); // Textura vida extra
-        
+
         tarro = new Tarro(new Texture(Gdx.files.internal("bucket.png")), hurtSound);
         lluvia = new Lluvia(gota, gotaMala, gotaEspecial,dropSound, rainMusic, gotaVidaExtra); // Pasar la gota vida extra a lluvia
-        
+
         // Configurar cámara
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -77,7 +77,7 @@ public class GameScreen implements Screen {
             tarro.actualizarMovimiento();
 
             // Caída de la lluvia
-            if (!lluvia.actualizarMovimiento(tarro)) {
+            if (!lluvia.actualizarMovimiento(batch, tarro)) {
                 if (game.getHigherScore() < tarro.getPuntos())
                     game.setHigherScore(tarro.getPuntos());
 
@@ -130,5 +130,5 @@ public class GameScreen implements Screen {
         rainMusic.dispose(); // Liberar la música de lluvia
         fondo.dispose();
     }
-    
+
 }
