@@ -76,7 +76,6 @@ public class Lluvia {
         if (tarro.getVidas() == 1 && !vidaExtraGenerada) {
             GotaFactory vidaExtraFactory = GotaFactoryProvider.getFactory(TipoGota.VIDA_EXTRA);
             Gota nuevaGotaVidaExtra = vidaExtraFactory.crearGota(gotaVidaExtra, dropSound, TAMANO_GOTA);
-            // Establecer posición aleatoria para la gota de vida extra
             nuevaGotaVidaExtra.getArea().x = MathUtils.random(0, 800 - TAMANO_GOTA);
             nuevaGotaVidaExtra.getArea().y = 480;
             gotas.add(nuevaGotaVidaExtra);

@@ -10,4 +10,3 @@ public class GotaVidaExtraFactory implements GotaFactory {
         return new GotaVidaExtra(textura, sonido, tamaño);
     }
 }
-
